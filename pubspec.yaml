@@ -1,0 +1,15 @@
+name: zachery_grok
+description: Zachery's Grok - Ray-Ban Meta Voice Assistant
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^9.2.2
+
+flutter:
+  uses-material-design: true
