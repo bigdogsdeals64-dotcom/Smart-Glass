@@ -9,7 +9,7 @@ class ZacheryGrokApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Smart Glass",
+      title: 'Smart Glass',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         primaryColor: const Color(0xFFFFD700),
@@ -28,7 +28,7 @@ class ZacheryGrokApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           ),
         ),
-        cardTheme: CardThemeData(
+        cardTheme: CardTheme(
           color: const Color(0xFF151515),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         ),
@@ -73,6 +73,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   Future<void> _loadApiKey() async {
     final savedKey = await _storage.read(key: 'xai_grok_key');
+    if (!mounted) return;
     setState(() {
       _apiKey = savedKey;
       _apiKeyController.text = savedKey ?? '';
@@ -83,6 +84,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     final trimmed = value.trim();
     if (trimmed.isEmpty) return;
     await _storage.write(key: 'xai_grok_key', value: trimmed);
+    if (!mounted) return;
     setState(() => _apiKey = trimmed);
   }
 
@@ -112,7 +114,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ),
             onPressed: () async {
               await _saveApiKey(_apiKeyController.text);
-              if (ctx.mounted) Navigator.pop(ctx);
+              if (!ctx.mounted) return;
+              Navigator.pop(ctx);
             },
             child: const Text('Save'),
           ),
@@ -234,9 +237,9 @@ class _StatusPanel extends StatelessWidget {
               style: TextStyle(color: Color(0xFFFFD700), fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            _StatusLine(icon: Icons.wifi, text: 'Internet Online', active: true),
-            _StatusLine(icon: Icons.mic, text: 'Mic Ready', active: true),
-            _StatusLine(icon: Icons.visibility_outlined, text: 'Smart Glasses Ready', active: false),
+            const _StatusLine(icon: Icons.wifi, text: 'Internet Online', active: true),
+            const _StatusLine(icon: Icons.mic, text: 'Mic Ready', active: true),
+            const _StatusLine(icon: Icons.visibility_outlined, text: 'Smart Glasses Ready', active: false),
             _StatusLine(icon: Icons.key, text: apiKeySaved ? 'API Key Saved' : 'API Key Needed', active: apiKeySaved),
           ],
         ),
@@ -316,17 +319,24 @@ class _ActionButton extends StatelessWidget {
   }
 }
 
+class MemoryItem {
+  const MemoryItem(this.title, this.subtitle);
+
+  final String title;
+  final String subtitle;
+}
+
 class MemoryBankScreen extends StatelessWidget {
   const MemoryBankScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final items = const [
-      ('Work Instruction - Procedure #7', 'Stored work instructions'),
-      ('Personal Note', 'Your saved note'),
-      ('Work Instruction - Procedure #6', 'Ready for details'),
-      ('Personal Note', 'Ready for details'),
-      ('Work Instruction - Procedure #5', 'Ready for details'),
+    const items = [
+      MemoryItem('Work Instruction - Procedure #7', 'Stored work instructions'),
+      MemoryItem('Personal Note', 'Your saved note'),
+      MemoryItem('Work Instruction - Procedure #6', 'Ready for details'),
+      MemoryItem('Personal Note', 'Ready for details'),
+      MemoryItem('Work Instruction - Procedure #5', 'Ready for details'),
     ];
 
     return Scaffold(
@@ -354,15 +364,14 @@ class MemoryBankScreen extends StatelessWidget {
             label: const Text('Teach New Data', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 16),
-          ...items.map(
-            (item) => Card(
+          for (final item in items)
+            Card(
               child: ListTile(
                 leading: const Icon(Icons.memory, color: Color(0xFFFFD700)),
-                title: Text(item.$1),
-                subtitle: Text(item.$2),
+                title: Text(item.title),
+                subtitle: Text(item.subtitle),
               ),
             ),
-          ),
         ],
       ),
     );
