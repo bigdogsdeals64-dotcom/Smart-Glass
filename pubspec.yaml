@@ -1,7 +1,7 @@
 name: zachery_grok
-description: Zachery's Grok - Ray-Ban Meta Voice Assistant
+description: Zachery's Grok - Smart Glass Voice Assistant
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^9.2.2
+  url_launcher: ^6.3.1
 
 flutter:
   uses-material-design: true
