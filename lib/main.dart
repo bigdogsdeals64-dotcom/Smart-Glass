@@ -28,10 +28,6 @@ class ZacheryGrokApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           ),
         ),
-        cardTheme: CardTheme(
-          color: const Color(0xFF151515),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color(0xFF111111),
@@ -220,6 +216,21 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   }
 }
 
+class AppCard extends StatelessWidget {
+  const AppCard({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xFF151515),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      child: child,
+    );
+  }
+}
+
 class _StatusPanel extends StatelessWidget {
   const _StatusPanel({required this.apiKeySaved});
 
@@ -227,7 +238,7 @@ class _StatusPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return AppCard(
       child: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -344,7 +355,7 @@ class MemoryBankScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Card(
+          const AppCard(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -365,7 +376,7 @@ class MemoryBankScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           for (final item in items)
-            Card(
+            AppCard(
               child: ListTile(
                 leading: const Icon(Icons.memory, color: Color(0xFFFFD700)),
                 title: Text(item.title),
